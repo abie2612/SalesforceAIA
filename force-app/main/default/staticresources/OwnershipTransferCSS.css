@@ -1,0 +1,27 @@
+.custom-path .slds-path__stage,.custom-path .slds-path__title{
+    text-wrap: auto;
+}
+
+.custom-path .slds-path__item{
+	height: 60px;
+}
+
+.custom-path .slds-path__item:before{
+    height: calc((4rem / 2) + .0625rem);
+}
+
+.custom-path .slds-path__item:after{
+    height:2.0625rem;
+}
+
+.custom-path .slds-icon_x-small,.custom-path .slds-icon--x-small{
+    margin-bottom: 1rem;
+}
+
+.custom-path .slds-path__stage,.custom-path .slds-path__title {
+	margin-top: 1.5rem;   
+}
+
+.custom-path span.slds-path__title{
+    font-size: smaller !important;
+}

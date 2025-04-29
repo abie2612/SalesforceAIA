@@ -1,0 +1,42 @@
+<template>
+	<div class="c-container">
+		<lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+			<lightning-layout multiple-rows="true">
+				<lightning-layout-item padding="around-small" size="9">
+					<lightning-input-field field-name="Generated_new_CC_in_Mercury_Account__c" value={record.Generated_new_CC_in_Mercury_Account__c} onchange={handleCheckBox}>
+					</lightning-input-field>
+				</lightning-layout-item>
+
+				<template if:true={record.Generated_new_CC_in_Mercury_Account__c}>
+					<lightning-layout-item padding="around-small" size="6">
+						<lightning-input-field field-name="Credit_Card_Name__c" value={record.Credit_Card_Name__c}></lightning-input-field>
+					</lightning-layout-item>
+
+					<lightning-layout-item padding="around-small" size="6">
+						<lightning-input-field field-name="Credit_Card_Number__c" value={record.Credit_Card_Number__c}></lightning-input-field>
+					</lightning-layout-item>
+
+					<!-- <lightning-layout-item padding="around-small" size="6">
+						<lightning-input-field field-name="Expiration__c" value={record.Expiration__c}></lightning-input-field>
+					</lightning-layout-item> -->
+
+					<lightning-layout-item padding="around-small" size="6">
+						<lightning-input-field field-name="Expiry_Month__c" value={record.Expiry_Month__c}></lightning-input-field>
+					</lightning-layout-item>
+
+					<lightning-layout-item padding="around-small" size="6">
+						<lightning-input-field field-name="Expiry_Year__c" value={record.Expiry_Year__c}></lightning-input-field>
+					</lightning-layout-item>
+
+					<lightning-layout-item padding="around-small" size="6">
+						<lightning-input-field field-name="CVV__c" value={record.CVV__c}></lightning-input-field>
+					</lightning-layout-item>
+
+					<lightning-layout-item padding="around-small" size="6">
+						<lightning-input-field field-name="Address__c" value={record.Address__c}></lightning-input-field>
+					</lightning-layout-item>
+				</template>
+			</lightning-layout>
+		</lightning-record-edit-form>
+	</div>
+</template>

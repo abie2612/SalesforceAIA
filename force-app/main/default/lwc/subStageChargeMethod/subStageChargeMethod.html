@@ -1,0 +1,87 @@
+<template>
+    <div class="c-container">
+        <template lwc:if={isLoading}>
+            <div class="spinner-container slds-spinner_inline slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+        <template lwc:else>
+            <lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item padding="around-small" size="8">
+                        <lightning-input-field field-name="Access_Charge_Methods__c"
+                            value={record.Access_Charge_Methods__c} required onchange={handleAccessChargeMethods}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <template lwc:if={record.Access_Charge_Methods__c}>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Current_Charge_Method_Name__c"
+                                value={record.Current_Charge_Method_Name__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Current_Charge_Method_Address__c"
+                                value={record.Current_Charge_Method_Address__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Current_Charge_Method_Last_3_Digits__c"
+                                value={record.Current_Charge_Method_Last_3_Digits__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Current_Charge_Method_Marketplaces__c"
+                                value={record.Current_Charge_Method_Marketplaces__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input type="file" label="Screenshot of Charge Methods Page Old"
+                                onchange={handleSSChargeMethods} required></lightning-input>
+                            <span lwc:if={chargeMethodsNameShow}
+                               >{chargeMethodsNameShow}</span>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Access_Manage_Charge_Methods_Page__c"
+                                value={record.Access_Manage_Charge_Methods_Page__c} onchange={handleAccessManageCharge} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <template lwc:if={record.Access_Manage_Charge_Methods_Page__c}>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Add_New_Charge_Method__c"
+                                    value={record.Add_New_Charge_Method__c} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Credit_Card_Holder_Name__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Credit_Card_Number__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Expiry_Month__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Expiry_Year__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="CVV__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input type="file" label="Screenshot of Charge Methods Page New"
+                                    onchange={handleSSChargeMethodsNew} required></lightning-input>
+                                <span lwc:if={chargeMethodsNewNameShow}
+                                   >{chargeMethodsNewNameShow}</span>
+                            </lightning-layout-item>
+                        </template>
+                    </template>
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </template>
+    </div>
+</template>

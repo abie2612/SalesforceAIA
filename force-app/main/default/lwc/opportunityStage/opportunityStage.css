@@ -1,0 +1,30 @@
+.slds-modal__container{
+        margin: 0 auto;
+        width: 100%;
+        max-width: 70rem; 
+    }
+
+ .center{
+    text-align:center;
+    margin-right: 10px;
+}
+
+.center div{
+    display:inline-block;
+    margin-left:5px;
+    margin-right:5px;
+    margin-right: 10px;
+}
+
+.slds-button{
+    margin-right: 10px;
+}
+
+.ownership-transfer .slds-modal__content{ 
+    height:unset !important;
+    max-height:unset !important; 
+}
+.ownership-transfer .slds-modal__container{ 
+    max-width:80rem!important; 
+    width:100% !important; 
+}

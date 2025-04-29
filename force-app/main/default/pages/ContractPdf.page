@@ -1,0 +1,95 @@
+<apex:page standardcontroller="Contract" extensions="GenerateContractPdf" applyBodyTag="false" renderAs="pdf" cache="true">
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <style>
+                @page {
+                size: A4;
+                margin: 25mm;
+                @top-center {
+                content: "Sample";
+                }
+                @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                }
+                }
+                .word{
+                width:33%
+                }
+                
+            </style>
+        </head>
+        <body>
+            <apex:outputText escape="false" value="{!Content}"></apex:outputText>
+            
+            <div class="footer" style="margin-top: 150px">
+                <div>
+                    <strong>Seller:</strong>
+                </div>
+                <table style="width:100%;border-spacing: 30px;">
+                    <tr>
+                        <td class="word"></td>
+                        <td class="word"></td>
+                        <td class="word"></td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: 1px solid black"  class="word border">Name</td>
+                        <td style="border-top: 1px solid black" class="word border">Signature</td>
+                        <td style="border-top: 1px solid black" class="word border">Date</td>
+                    </tr>
+                </table>
+                <div>
+                    <strong>Buyer:</strong>
+                </div>
+                <table style="width:100%;border-spacing: 30px;">
+                    <tr>
+                        <td class="word"></td>
+                        <td class="word"></td>
+                        <td class="word"></td>
+                    </tr>
+                    <tr>
+                        <td style="border-top: 1px solid black" class="word border">Name</td>
+                        <td style="border-top: 1px solid black" class="word border">Signature</td>
+                        <td style="border-top: 1px solid black" class="word border">Date</td>
+                    </tr>
+                </table>
+                <!--div class="details">
+                    <div class="box" style="padding: 20px 0px">
+                        Name: <u>{!Seller_Name}</u>
+                    </div>
+                    <div class="box">
+                        Signature: <u>{!Seller_Signature}</u>
+                    </div>
+                    <div class="box" style="padding: 20px 0px 40px">
+                        Date:
+                        <u>
+                            <apex:outputText value=" {0,date,dd/MM/yyyy}">
+                                <apex:param value="{!Seller_Signature_Date}" />
+                            </apex:outputText>
+                        </u>
+                    </div>
+                </div-->
+                
+                <!--div>
+                    <strong>Buyer:</strong>
+                </div>
+                <div class="details">
+                    <div class="box" style="padding: 20px 0px">
+                        Name: <u>{!Buyer_Name}</u>
+                    </div>
+                    <div class="box">
+                        Signature: <u>{!Buyer_Signature}</u>
+                    </div>
+                    <div class="box" style="padding: 20px 0px">
+                        Date:
+                        <u>
+                            <apex:outputText value=" {0,date,dd/MM/yyyy}">
+                                <apex:param value="{!Buyer_Signature_Date}" />
+                            </apex:outputText>
+                        </u>
+                    </div>
+                </div-->
+            </div>
+        </body>
+    </html>
+</apex:page>

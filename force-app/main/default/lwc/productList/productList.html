@@ -1,0 +1,383 @@
+<!--
+  @description       : 
+  @author            : Rishiraj Singh
+  @group             : 
+  @last modified on  : 08-27-2024
+  @last modified by  : Axel Bagra
+  @last modified on  : 12-7-2024
+  @last modified by  : Adam Chauhan
+-->
+<template>
+    <template lwc:if={hideSpinner}>
+        <template lwc:if={pageItems}>
+            <lightning-card title="Product List" icon-name="standard:product_item">
+
+                <!--click filter button to open modal-->
+                <lightning-button class="slds-float_right" variant="brand-outline" label="Filter Product"
+                    onclick={showingFilterModal}></lightning-button>
+                <template if:true={openFiterModal}>
+                    <c-child-product-list-modal lead-record-id={recordId} onprogressvaluechange={hanldeProgressValueChange}
+                        new-search-products={retainFilteredProduct}></c-child-product-list-modal>
+                </template>
+                <lightning-layout vertical-align="start" style="width: 100%;">
+                    <fieldset>
+                        <div style="width: 100%;text-align: center;">
+                            <template for:each={pageItems} for:item="prod">
+                                <lightning-layout-item size="12" small-device-size="4" medium-device-size="4"
+                                    large-device-size="4" key={prod.Id}>
+                                    <div class="slds-visual-picker slds-visual-picker_large product-card" key={prod.Id}>
+                                        <input type="radio" id={prod.Id} value={prod.Id} name="example-unique-name-38"
+                                            onclick={handleProduct} />
+                                        <label for={prod.Id}>
+                                            <div data-id={prod.Id}
+                                                class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+                                                <span>
+                                                    <span
+                                                        class="slds-text-heading_large">{prod.Amazon_Asset__r.Amazon_Asset_Name__c}</span>
+                                                        <br/>
+                                                    <span class="slds-text-title" style="height:25px">Sale Price :
+                                                        {prod.Sale_Price__c}</span>
+                                                    <span class="slds-text-title" style="height:25px">AIA Account Type :
+                                                        <template
+                                                            lwc:if={prod.Account_Type__c}>{prod.Account_Type__c}</template>
+                                                        <template lwc:else>Standard</template> </span>
+                                                    <template lwc:if={prod.Special_Account_Type__c}>
+                                                        <span class="slds-text-title" style="height:25px">Special
+                                                            Account Type : {prod.Special_Account_Type__c}</span>
+                                                    </template>
+                                                    <span class="slds-text-title" style="height:25px">Feedback :
+                                                        {prod.Feedback__c}</span>
+                                                </span>
+                                                <template if:true={prod.LLC_Asset__c}>
+                                                    <div class="topright">&nbsp;Business and Asset</div>
+                                                </template>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </lightning-layout-item>
+
+                            </template>
+                        </div>
+                    </fieldset>
+                </lightning-layout>
+
+                <!--Pagination-->
+                    <div class="pagination-UI" lwc:if={showPaginationTool}>
+                        <button onclick={handleFirst} disabled={isFirstPage}>First</button>
+                        <button onclick={handlePrevious} disabled={isFirstPage}>&larr;</button>
+                        <span class="pagination-status">{currentPage} of {totalPages}</span>
+                        <button onclick={handleNext} disabled={isLastPage}>&rarr;</button>
+                        <button onclick={handleLast} disabled={isLastPage}>Last</button>
+                        <lightning-combobox class="countCombo" value={getItemsRow} options={productCountOptions}
+                            onchange={handleProductCountOptionsChange}></lightning-combobox>
+                    </div>
+                    <div style="text-align:center; font-size: large; padding-bottom: 20px;" lwc:else>
+                        No Product Found
+                    </div>
+
+            </lightning-card>
+            <template if:true={showProductDetails}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <!-- modal header start -->
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={hideModalBox}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close"
+                                    size="small"></lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Product Details
+                            </h2>
+                        </header>
+
+                        <!-- modal body start -->
+                        <div class="wordArrangement slds-modal__content slds-p-around_medium" style="font-size:1rem;padding-left:40px;"
+                            id="modal-content-id-1">
+                            <lightning-layout multiple-rows>
+                                <lightning-layout-item size="3" padding="around-small">
+                                    <div class="custom-box">Asset Number</div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="3" padding="around-small">
+                                    <div class="custom-box">{selectedProduct.Amazon_Asset__r.Amazon_Asset_Name__c}</div>
+                                </lightning-layout-item>
+                                <template lwc:if={selectedProduct.Non_Amazon_Platform__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Non-Amazon Platform</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Non_Amazon_Platform__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <lightning-layout-item size="3" padding="around-small">
+                                    <div class="custom-box">Amazon Account Type</div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="3" padding="around-small">
+                                    <div class="custom-box"> <template
+                                            lwc:if={selectedProduct.Amazon_Account_Type__c}>{selectedProduct.Amazon_Account_Type__c}</template>
+                                        <template lwc:else>Seller</template></div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="3" padding="around-small">
+                                    <div class="custom-box">AIA Account Type</div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="3" padding="around-small">
+                                    <div class="custom-box"><template
+                                            lwc:if={selectedProduct.Account_Type__c}>{selectedProduct.Account_Type__c}</template>
+                                        <template lwc:else>Standard</template></div>
+                                </lightning-layout-item>
+                                <template lwc:if={selectedProduct.Special_Account_Type__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Special Account Type</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Special_Account_Type__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Creation_Date__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Account Creation Date</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Creation_Date__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Earliest_account_statement_date__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Earliest account statement date</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Earliest_account_statement_date__c}
+                                        </div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={hideUSMarketplace}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Marketplace</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Marketplace__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Additional_Marketplaces__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Additional Marketplaces</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Additional_Marketplaces__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.US_Citizen_Owner__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">US Citizen Owner</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.US_Citizen_Owner__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Feedback__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Feedback</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Feedback__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Stars_Store_Feedback__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Stars</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Stars_Store_Feedback__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Positive_Feedback_USA__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Positive Feedback USA</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Positive_Feedback_USA__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Health_Assurance_Score__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Health Assurance Score</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Health_Assurance_Score__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.IPI__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">IPI</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.IPI__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Categories_Approved__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Categories Approved</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Categories_Approved__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Brands_approved__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Brands Approved</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Brands_approved__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.ASINs_approved__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">ASINs approved</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.ASINs_approved__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Refurbished__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Refurbished</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Refurbished__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Hazmat__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Hazmat</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Hazmat__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Hazmat_Flammable_Storage_Limit__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Hazmat - Flammable Storage Limit</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Hazmat_Flammable_Storage_Limit__c}
+                                        </div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Hazmat_Aerosol_Storage_Limit__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Hazmat - Aerosol Storage Limit</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Hazmat_Aerosol_Storage_Limit__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Non_Standard_Inventory_Limits__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Non-Standard Inventory Limits</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Non_Standard_Inventory_Limits__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Fulfillment__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Fulfillment</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Fulfillment__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Brand_Registry__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Brands Registry</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Brand_Registry__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Eligible_for_Amazon_Loan__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Eligible for Amazon Loan</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Eligible_for_Amazon_Loan__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.SFP_Eligible__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">SFP Eligible</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.SFP_Eligible__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Sales_History_All_Time__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Sales History (All Time)</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Sales_History_All_Time__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Recent_Sales_Within_12_months__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Recent Sales Within 12 months</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Recent_Sales_Within_12_months__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Recent_Sales_Within_3_months__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Recent Sales Within 3 months</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Recent_Sales_Within_3_months__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Sales_History_Year_to_Date__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Sales History - Year to Date</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Sales_History_Year_to_Date__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Sales_History_2_Years_to_Date__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Sales History - 2 Years to Date</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Sales_History_2_Years_to_Date__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                                <template lwc:if={selectedProduct.Overall_Units_Sold__c}>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">Units Sold: 2015 - Present</div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="3" padding="around-small">
+                                        <div class="custom-box">{selectedProduct.Overall_Units_Sold__c}</div>
+                                    </lightning-layout-item>
+                                </template>
+                            </lightning-layout>
+                        </div>
+
+                        <!-- modal footer start -->
+                        <footer class="slds-modal__footer">
+                            <div class="slds-grid slds-grid_align-center">
+                                <button class="slds-button slds-button_neutral" onclick={sendEmail}>Send Email</button>
+                            </div>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+        </template>
+    </template>
+    <template lwc:else>
+        <div class="exampleHolder">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
+</template>

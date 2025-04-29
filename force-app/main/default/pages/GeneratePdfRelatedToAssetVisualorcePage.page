@@ -1,0 +1,196 @@
+<apex:page standardController="Asset" extensions="GeneratePdfRelatedToAsset" renderAs="pdf" standardStylesheets="false" readOnly="true" applyBodyTag="false">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style type="text/css" media="print">
+            .fonttext{
+            font-size:17px;
+            font-weight:normal;
+            margin-left: 30px;
+            padding-left: 55px;
+            }
+            .headerText{
+            font-weight:bold;
+            }
+            .divText{
+            padding-bottom:5px;
+            }
+            @page {
+            margin-top: .5in;
+            margin-right: 0cm;
+            padding-right: 0cm;
+            @top-center {
+            content: element(header);
+            }
+            @bottom-center {
+            content: element(footer);
+            }
+            }
+            div.header {
+            position: running(header);
+            }
+            div.footer {
+            dispay:block;
+            text-align: center;
+            padding-bottom: 45px;
+            padding-right: 45px;
+            font-weight: bold;
+            position: running(footer);
+            }
+            .content {
+            position: relative;
+            }
+        </style>
+        <div class="footer"><a style="color: #0563c1;" href="https://aia-assets.com/">aia-assets.com</a></div>
+        <div style="display: flex;">
+            <apex:image style="color:red;padding-bottom:20px;" value="{!URLFOR($Resource.AssetPdfZip, 'AIA_Logo1.png')}" height="79px" width="751px"/>
+        </div>
+        <br/><br/>
+    </head>
+    <apex:form >
+        <div class="fonttext">
+            <div class="divText">
+                <apex:image value="{!URLFOR($Resource.AssetPdfZip, 'hat_emoji.png')}" height="14px" width="14px"/>
+                &nbsp; Great Premium Amazon Seller account for sale &nbsp; 
+                <apex:image style="margin-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'ThumbsUp.png')}" height="14" width="14"/>
+                &nbsp; 
+                <apex:image style="padding-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'Flame_emoji.png')}" height="14" width="14"/>
+            </div>
+            <apex:outputPanel rendered="{!hazmatValue == 'Yes'}">
+                <div class="divText">
+                    <apex:image value="{!URLFOR($Resource.AssetPdfZip, 'warning-sign.png')}" width="14" height="14"/>
+                    <apex:outputPanel rendered="{!AND(hazmatFlammable ==  ' ', hazmatAerosole ==  ' ')}">
+                        &nbsp;&nbsp;<span class="headerText">HAZMAT ELIGIBLE!</span>&nbsp; 
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hazmatFlammable !=  ' ', hazmatAerosole ==  ' ')}">
+                        &nbsp;&nbsp;HAZMAT ACCOUNT: Eligible for <span class="headerText">FLAMMABLE</span> STORAGE!&nbsp; 
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hazmatFlammable ==  ' ', hazmatAerosole !=  ' ')}">
+                        &nbsp;&nbsp;HAZMAT ACCOUNT: Eligible for <span class="headerText">AEROSOL</span> STORAGE!&nbsp; 
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!AND(hazmatFlammable !=  ' ', hazmatAerosole !=  ' ')}">
+                        &nbsp;&nbsp;HAZMAT ACCOUNT: Eligible for <span class="headerText">FLAMMABLE AND AEROSOL</span> STORAGE!&nbsp; 
+                    </apex:outputPanel>
+                </div>
+            </apex:outputPanel>
+            <br/>
+            <apex:outputPanel rendered="{!accountType == 'Special'}">
+                <div class="divText">
+                    <span class="headerText">   SPECIAL ACCOUNT: </span>
+                    <apex:outputText value="{!specialAccountType}"></apex:outputText>
+                    <span class="headerText"> NON-RESERVE!</span>
+                </div>
+                <br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!creationDate != ' '}">
+                <div class="divText">
+                    <apex:image style="margin-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'check_Mark.png')}" height="14" width="14"/>
+                    &nbsp; <span class="headerText">   Registered: </span>
+                    <apex:outputText value="{!creationDate}"></apex:outputText>
+                </div>
+                <br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!marketplace != ' '}">
+                <div class="divText">
+                    <apex:image style="padding-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'check_Mark.png')}" height="14" width="14"/>
+                    &nbsp; <span class="headerText">   Account plan: </span>Professional<br/>
+                    <apex:outputText value="{!marketplace}"></apex:outputText>
+                    Marketplace
+                    <br/>
+                    <apex:outputPanel rendered="{!usCitizenOwner == 'Yes'}"><span class="headerText">US Citizen Owner</span></apex:outputPanel>
+                    <apex:outputPanel rendered="{!usCitizenOwner == 'No'}"></apex:outputPanel>
+                </div>
+                <br/><br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!feedback != ' '}">
+                <div class="divText">
+                    <apex:image style="padding-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'HotSpringEmoji.png')}" height="14" width="14"/>
+                    &nbsp; 
+                    <apex:outputText value="{!feedback}"></apex:outputText><span class="headerText"> Store reviews</span><apex:outputPanel rendered="{!positiveFeedbackUSA != ' '}"><span>, </span>
+                    <apex:outputText value="{!positiveFeedbackUSA}"></apex:outputText>%<span class="headerText"> Positive in USA</span>
+                    </apex:outputPanel>
+                </div>
+                <br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!healthAssuranceScore != ' '}">
+                <div class="divText">
+                    <apex:image style="padding-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'hospital_emoji.png')}" height="14" width="14"/>
+                    &nbsp; <span class="headerText">Account Health: </span>
+                    <apex:outputText value="{!healthAssuranceScore}"></apex:outputText>
+                </div>
+                <br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!categoriesApproved !=  ' '}">
+                <div class="divText">
+                    <span class="headerText">Open Categories: </span><br/> 
+                    <apex:repeat value="{!concatenateSplitCategoriesApproved}" var="string">
+                        <apex:image style="padding-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'CollisionEmoji.png')}" height="12" width="12"/>
+                        &nbsp; 
+                        <apex:image style="padding-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'sparkle_emoji.png')}" height="12" width="12"/>
+                        &nbsp; 
+                        <apex:outputText value="{!string}"></apex:outputText>
+                        <br/>
+                    </apex:repeat>
+                </div>
+                <br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!brandsApproved !=  ' '}">
+                <div class="divText">
+                    <span class="headerText">Ungated Brands: </span><br/> 
+                    <apex:repeat value="{!concatenateSplitBrandsApproved}" var="string">
+                        <apex:image style="padding-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'CollisionEmoji.png')}" height="12" width="12"/>
+                        &nbsp; 
+                        <apex:image style="padding-top: 5px;" value="{!URLFOR($Resource.AssetPdfZip, 'sparkle_emoji.png')}" height="12" width="12"/>
+                        &nbsp; 
+                        <apex:outputText value="{!string}"></apex:outputText>
+                        <br/>
+                    </apex:repeat>
+                </div>
+                <br/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!salesHistoryYeartoDate != ' '}">
+                <div class="divText">
+                    <span class="headerText">Sales-Year to Date: </span>
+                    <apex:outputText value="{!salesHistoryYeartoDate}"></apex:outputText>
+                    <br/>              
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!salesHistoryAllTime != ' '}">
+                <div class="divText">
+                    <span class="headerText">Sales-All time: </span>
+                    <apex:outputText value="{!salesHistoryAllTime}"></apex:outputText>
+                    <br/>              
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!overallUnitsSold != ' '}">
+                <div class="divText">
+                    <span class="headerText">Units Sold: 2015 - Present: </span>
+                    <apex:outputText value="{!overallUnitsSold}"></apex:outputText>
+                    <br/>              
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!unitsSoldYeartoDate != ' '}">
+                <div class="divText">
+                    <span class="headerText">Units Sold-Year to Date-: </span>
+                    <apex:outputText value="{!unitsSoldYeartoDate}"></apex:outputText>
+                    <br/>              
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!OR(salesHistoryYeartoDate !=  ' ', salesHistoryAllTime !=  ' ', overallUnitsSold !=  ' ', unitsSoldYeartoDate !=  ' ')}"><br/></apex:outputPanel>
+            <apex:outputPanel rendered="{!salePrice != null}">
+                <div class="divText">
+                    <span class="headerText">Price: </span>
+                    <apex:outputText value="{!salePrice}"></apex:outputText>
+                    <br/>              
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!amazonAssetNumber != ' '}">
+                <div class="divText">
+                    <span class="headerText">REF: </span>
+                    <apex:outputText value="{!amazonAssetNumber}"></apex:outputText>
+                    <br/>              
+                </div>
+            </apex:outputPanel>
+        </div>
+        <br/><br/>
+    </apex:form>
+</apex:page>

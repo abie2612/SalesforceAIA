@@ -1,0 +1,46 @@
+<template>
+    <div>
+		<lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+			<lightning-layout multiple-rows="true">
+				<lightning-layout-item padding="around-small" size="8">
+					<lightning-input-field field-name="Email_Address_on_Email_Account__c" disabled></lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="8">
+					<lightning-input-field field-name="Amazon_Password__c" disabled>
+					</lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="8">
+					<lightning-input-field field-name="Amazon_QR_Code__c" disabled>
+					</lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="8">
+					<lightning-input-field field-name="Accessed_Amazon_Account__c" value={record.Accessed_Amazon_Account__c} onchange={handleAccessedAmazon} required>
+					</lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="8" lwc:if={record.Accessed_Amazon_Account__c}>
+					<lightning-input-field field-name="Open_Help_ticket_1__c" value={record.Open_Help_ticket_1__c} onchange={handleOpenTicketHelp} required>
+					</lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="8" lwc:if={record.Open_Help_ticket_1__c}>
+					<lightning-input-field field-name="Received_Amazon_s_response__c" value={record.Received_Amazon_s_response__c} onchange={handleReceivedAmazon} required>
+					</lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="8" lwc:if={record.Received_Amazon_s_response__c}>
+					<lightning-input-field field-name="Reply_to_Help_ticket_1__c" value={record.Reply_to_Help_ticket_1__c} onchange={handleReplyToHelp1} required>
+					</lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="8" lwc:if={record.Reply_to_Help_ticket_1__c}>
+					<lightning-input-field field-name="Open_Help_ticket_2__c" value={record.Open_Help_ticket_2__c} required>
+					</lightning-input-field>
+				</lightning-layout-item>
+			</lightning-layout>
+		</lightning-record-edit-form>
+	</div>
+</template>

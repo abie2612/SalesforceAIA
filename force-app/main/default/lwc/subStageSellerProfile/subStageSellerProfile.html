@@ -1,0 +1,167 @@
+<template>
+    <div class="c-container">
+        <template lwc:if={isLoading}>
+            <div class="spinner-container slds-spinner_inline slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+        <template lwc:else>
+            <lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item padding="around-small" size="8">
+                        <lightning-input-field field-name="Access_Account_profile_information__c"
+                            value={record.Access_Account_profile_information__c} required
+                            onchange={handleAccessAccountProfile}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <template lwc:if={record.Access_Account_profile_information__c}>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Change_Store_Name_Link_Marketplaces__c"
+                                value={record.Change_Store_Name_Link_Marketplaces__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Company_Name__c" disabled>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Rename_Store_in_Global_Accounts__c"
+                                value={record.Rename_Store_in_Global_Accounts__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Change_Notifications_Email__c"
+                                value={record.Change_Notifications_Email__c}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Updated_Address_for_Returns__c"
+                                value={record.Updated_Address_for_Returns__c} onchange={handleUpdatedAddress} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+
+                        <template lwc:if={record.Updated_Address_for_Returns__c}>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Company_Name__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <template lwc:if={record.Returns_Address__c}>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Returns_Address__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:else>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Business_Address__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:if={record.Returns_Address_City__c}>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Returns_Address_City__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:else>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Business_Address_City__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:if={record.Returns_Address_State__c}>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Returns_Address_State__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:else>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Business_Address_State__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:if={record.Returns_Address_Zip__c}>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Returns_Address_Zip__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:else>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Business_Address_Zip__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:if={record.Returns_Address_Country__c}>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Returns_Address_Country__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:else>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Returns_Address_Country__c" value="US" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:if={record.Returns_Address_Phone_Number__c}>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Returns_Address_Phone_Number__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                            <template lwc:else>
+                                <lightning-layout-item padding="around-small" size="8">
+                                    <lightning-input-field field-name="Business_Address_Phone_Number__c" disabled>
+                                    </lightning-input-field>
+                                </lightning-layout-item>
+                            </template>
+                        </template>
+                        <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Updated_Address_of_Auto_Removals__c"
+                                    value={record.Updated_Address_of_Auto_Removals__c} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Delete_all_Your_Info_and_Policies__c"
+                                    value={record.Delete_all_Your_Info_and_Policies__c} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Delete_all_FBM_Listings__c"
+                                    value={record.Delete_all_FBM_Listings__c} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Added_product__c" value={record.Added_product__c}
+                                    required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Changed_Business_Address__c"
+                                    value={record.Changed_Business_Address__c} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Address_Verification_Required__c"
+                                    value={record.Address_Verification_Required__c} onchange={handleAddressVerification}>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8"
+                                lwc:if={record.Address_Verification_Required__c}>
+                                <label class="slds-form-element__label slds-no-flex">Screenshot of Address
+                                    Verification</label>
+                                <lightning-helptext
+                                    content="Save screenshot of postcard tracking on verification page"></lightning-helptext>
+                                <lightning-input type="file" variant="label-hidden"
+                                    onchange={handleSSAddressVerify}></lightning-input>
+                                <span lwc:if={addressVerifyNameShow}>{addressVerifyNameShow}</span>
+                            </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </template>
+    </div>
+</template>

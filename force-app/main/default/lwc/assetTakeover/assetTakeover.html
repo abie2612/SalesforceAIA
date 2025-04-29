@@ -1,0 +1,26 @@
+<template>
+	<lightning-quick-action-panel>
+		<div class="slds-m-vertical_medium custom-progress-bar-indicator">
+			<lightning-progress-indicator type="path" variant="base" current-step={currentStep}>
+				<template for:each={steps} for:item="step" for:index="index">
+					<lightning-progress-step key={step.Name} label={step.Name} value={step.value}>
+					</lightning-progress-step>
+				</template>
+			</lightning-progress-indicator>
+		</div>
+		<div if:false={isLoading}>
+			<div class="container slds-m-vertical_medium slds-p-bottom_xx-medium">
+				<c-asset-takeover-steps onisvalidornot={checkValidity} onchangestep={getCurrentStep} current-step-name={currentStep} steps={steps} opportunity-id={recordId}>
+				</c-asset-takeover-steps>
+			</div>
+		</div>
+	</lightning-quick-action-panel>
+
+	<div class="slds-is-relative">
+		<template if:true={isLoading}>
+			<div class="slds-spinner_container_fullscreen slds-is-absolute">
+				<lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+			</div>
+		</template>
+	</div>
+</template>

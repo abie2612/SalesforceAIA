@@ -1,0 +1,39 @@
+<template>
+	<template if:true={isLoading}>
+		<div>
+			<lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+		</div>
+	</template>
+	<template if:false={isLoading}>
+		<div class="c-container">
+			<lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+				<lightning-layout multiple-rows="true">
+					<lightning-layout-item padding="around-small" size="9">
+						<lightning-input-field field-name="Existing_Email_Address_Included__c" data-name="existingCheckbox"
+							onchange={handleCheckBox}>
+						</lightning-input-field>
+					</lightning-layout-item>
+	
+					<template if:false={hideDetails}>
+						<lightning-layout-item padding="around-small" size="6">
+							<lightning-input-field field-name="Email_Address_on_Email_Account__c" required>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="6">
+							<lightning-input-field field-name="Email_Account_Password_Final__c" required>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="12">
+							<lightning-input-field field-name="Email_Account_OTP_QR_code_Final_Email__c" onchange={handleOTP} value={recordValue.Email_Account_OTP_QR_code_Final_Email__c} required>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+					</template>
+				</lightning-layout>
+			</lightning-record-edit-form>
+		</div>
+	</template>
+	
+</template>

@@ -1,0 +1,39 @@
+<template>
+	<div class="c-container">
+		<lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+			<lightning-layout multiple-rows="true">
+				<lightning-layout-item padding="around-small" size="6">
+					<lightning-input-field field-name="VPS_Name__c" required></lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="6">
+					<lightning-input-field field-name="VPS_IP_address__c" required></lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="6">
+					<lightning-input-field field-name="VPS_Username__c" required></lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="6">
+					<lightning-input-field field-name="VPS_Password__c" required></lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="6">
+					<lightning-input-field field-name="Cookies_added__c" required></lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="6">
+					<lightning-input-field field-name="Time_Zone_adjusted__c" required></lightning-input-field>
+				</lightning-layout-item>
+
+				<lightning-layout-item padding="around-small" size="6">
+					<lightning-input-field field-name="Adobe_PDF_Reader_Added__c" required></lightning-input-field>
+				</lightning-layout-item>
+				<lightning-layout-item padding="around-small" size="6">
+					<lightning-input-field field-name="Anydesk_Added__c" required></lightning-input-field>
+				</lightning-layout-item>
+
+			</lightning-layout>
+		</lightning-record-edit-form>
+	</div>
+</template>

@@ -1,0 +1,228 @@
+<apex:page standardController="Opportunity" extensions="UKAccountDeliveryPdfController" renderAs="pdf" standardStylesheets="false" readOnly="true" applyBodyTag="false">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style type="text/css" media="print">
+            .checkMark{
+            list-style-type: none;
+            }
+            .checkMark li:before{
+            content: '\f3fd';
+            }
+            .fonttext{
+            line-height: 1.29;
+            font-family:sans-serif;
+            font-size:16px;
+            font-weight:normal;
+            margin-left: 15px;
+            //padding-left: 39px;
+            margin-right: 10px;
+            padding-right: 15px;
+            margin-bottom: 14px;
+            }
+            .tablestyle{
+            font-family:sans-serif;
+            font-size:17px;
+            font-weight:normal;
+            margin-right: 48px;
+            padding-right: 55px;
+            }
+            @page {
+            margin-bottom: .75in;
+            margin-top: .85in;
+            padding-top: .15in;
+            margin-right: .29cm;
+            padding-right: .29cm;
+            page-break:always; page-break-inside:avoid;
+            @top-center {
+            content: element(header);
+            }
+            @bottom-center {
+            content: element(footer);
+            }
+            }
+            div.header {
+            display:block;
+            margin-top:10px;
+            margin-bottom:10px;
+            position: running(header);
+            width: 100%;
+            margin-right: 10px;
+            }
+            div.footer {
+            display:block;
+            text-align: center;
+            padding-bottom: 45px;
+            margin-bottom: 75px;
+            padding-right: 45px;
+            font-weight: bold;
+            font-size: 19px;
+            position: running(footer);
+            }
+            
+            table, th, .table-cell {
+            border: 1px solid black;
+            border-collapse: collapse;
+            overflow-wrap: break-word;
+            }
+            
+            .container-image img{
+            display:block;
+            margin-left:auto;
+            margin-right:auto;
+            }
+            
+            th {
+            line-height: 1.2;
+            padding-bottom: 16px;
+            padding-left: 10px;
+            }
+            ul,li {
+            margin-top:2px;
+            padding-top:2px;
+            }
+        </style> 
+        <div class="footer"><a style="color: #4D36FF;" href="https://aia-assets.com/">aia-assets.com</a></div>
+        <div class="header">
+            <apex:image style="color:red;padding-bottom:20px;" value="{!URLFOR($Resource.AssetPdfZip, 'AIA_Logo1.png')}" height="71px" width="768px"/>
+        </div>
+        
+    </head>
+    <apex:form >
+        <div class="fonttext">
+            <div style="text-align: right;">
+                <apex:outputText value="{!newFormat}" />
+            </div>
+            <div>
+                Dear &#8239;<apex:outputField value="{!opp.Name}"/>,<br/><br/>Congratulations, your Amazon UK store is open, and you can begin selling!
+                <br/><br/>
+                <u style="color:red;font-weight: bold;">PLEASE NOTE – your account will need to undergo a secondary verification once you have reached £15,000 in sales. While we would be happy to help you with this, please be aware that the secondary verification is not included in this registration service. Please contact our office for pricing information.</u>
+                <br/><br/>
+                To sell on Amazon, log into: <a style="color: #4D36FF;" href="https://sellercentral.amazon.co.uk/">https://sellercentral.amazon.co.uk/</a><br/><br/>Here are your account login credentials:
+            </div>
+            <div class="tablestyle">
+                <table style='border: 1px solid black;border-collapse: collapse;margin-left: 4px;padding-left: 35px;margin-top: 15px;'>
+                    <tr>
+                        <th style="width:50%;">Email Details:</th>
+                        <td class="table-cell" style="width:50%;background-color: #8ED9C7;padding-left:8px;"><apex:outputField value="{!opp.Email_Address_on_Email_Account__c}"/></td>
+                    </tr>                    
+                    
+                    <tr>
+                        <th style="width:50%;">Password:</th>
+                        <td class="table-cell" style="background-color: #8ED9C7;padding-left:8px;width:50%;"><apex:outputField value="{!opp.Email_Password__c}"/></td>
+                    </tr>
+                    <tr>
+                        <th style="width:50%;">Recovery Phone number:</th>
+                        <td class="table-cell" style="background-color: #8ED9C7;padding-left:8px;width:50%;"><apex:outputField value="{!opp.Google_recovery_Phone_Number__c}"/></td>
+                    </tr>
+                    <tr>
+                        <th style="padding-bottom: 4px;" colspan="2"><u>Store Details</u></th>
+                    </tr>
+                    <tr>
+                        <th style="width:50%;">Name of the store</th>
+                        <td class="table-cell" style="background-color: #8ED9C7;padding-left:8px;width:50%;"><apex:outputField value="{!opp.Store_Name__c}"/></td>
+                    </tr>
+                    <tr>
+                        <th style="padding-bottom: 4px;" colspan="2"><u>Access details - Amazon</u></th>
+                    </tr>
+                    <tr>
+                        <th style="max-width:50%;">Amazon username </th>
+                        <td class="table-cell" style="background-color: #8ED9C7;padding-left:8px;width:50%;"><apex:outputField value="{!opp.Email_Address_on_Email_Account__c}"/></td>
+                    </tr>
+                    <tr>
+                        <th style="max-width:50%;">Amazon password </th>
+                        <td class="table-cell" style="background-color: #8ED9C7;padding-left:8px;max-width:50%;overflow-wrap: break-word;"><apex:outputText value="{!opp.Amazon_Password__c}" escape="false"/></td>
+                    </tr>
+                    <tr>
+                        <th style="width:50%;">2SV – OTP – QR Code (see attached sheet for further instructions)</th>
+                        <td class="container-image" style="width:50%;padding-top:8px;padding-bottom: 8px;border: 1px solid black;"><apex:outputText escape="false" value="{!opp.Amazon_QR_Code__c}"/></td>
+                    </tr>
+                    <tr>
+                        <th style="width:50%;">MERCHANT TOKEN ID:</th>
+                        <td class="table-cell" style="background-color: #8ED9C7;padding-left:8px;width:50%;"><apex:outputField value="{!opp.Merchant_Token__c}"/></td>
+                    </tr>
+                </table>
+            </div><br/><br/>
+            <div style="font-style: italic;font-weight: bold;font-size: 15px;">
+                Please note: The content of this documentation is PRIVATE. We advise you not to share these credentials.
+            </div><br/><br/>
+            <div style="font-weight: bold;">
+                You are on the road to a profitable selling experience! The experts at AIA have written this guide to keep you informed of Amazon’s Best Practices for sellers. Here are a few things that you should know about selling on Amazon:
+            </div><br/><br/>
+            <div>
+                <div>
+                    <div style="font-weight: bold;padding-bottom: 4px;">Account Access</div>
+                    <div>When you log on to your Amazon account, you will be asked for the user’s name, log-in and two-factor verification credentials. Do not share this information with anyone.</div>
+                    <ul>
+                        <li>DO NOT open another seller account using any of the information that is included in your seller application (including phone number, email address, credit card or banking information)</li>
+                        <li>DO NOT link yourself to another seller account using any of the above information</li>
+                        <li>DO NOT log into your Amazon seller account from public WIFI</li>
+                        <li>When logging into seller central on Amazon, make sure that no other Amazon seller is using the same computer or internet connection </li>
+                    </ul>
+                </div>
+            </div>
+            <div><span style="font-weight: bold;">Please note:</span> Do not change the email address linked to the Amazon seller account. If necessary, please consult with us.</div><br/>
+            <div>To protect your own privacy, we suggest you change the recovery phone number and password on your <span style="font-weight: bold;">Gmail account</span> (not AMAZON).</div><br/>
+            <div>Your new Amazon seller account has a connected buyer account (amazon.co.uk, amazon.co.de, etc) that is accessed with the same login information.</div>
+            <div style="color:red;"><span style="color:black;font-weight: bold;">Important!</span> We strongly recommend that you do NOT use the buyer account connected to this new seller account. Doing so can have inadvertent negative effects on the seller account. Please note that we will not take any responsibility for issues that arise due to the use of the buyer account.</div><br/>
+            <div><span style="font-weight: bold;">Sellers’ Expectations</span><br/>If this is the first time you’re selling on Amazon, we highly advise you to become an EXPERT on all of Amazon’s Terms of Service. By selling on Amazon, you are expected to familiarize yourself with all their policies. Violating these terms may lead to suspension, but being aware of these rules and regulations will keep your seller account healthy.</div><br/>
+            <div>For a full list of policies and sellers' code of conduct click here: <a style="color: #4D36FF;" href="https://sellercentral.amazon.co.uk/help/hub/reference/G1801">https://sellercentral.amazon.co.uk/help/hub/reference/G1801.</a></div><br/>
+            <div><span style="font-weight: bold;">Additional Marketplaces</span><br/>Your account is open to selling products in the United Kingdom, as well as 12 other marketplaces, including the United States, Japan and Australia.</div><br/>
+            <div style="margin-bottom: 35px;"><span style="font-weight: bold;padding-bottom: 2px;">Product Listings</span><br/>When listing products on Amazon be aware of categories and products that may be restricted or need approval. Here’s a link from Amazon about categories that need approval: <a style="color: #4D36FF;" href="https://sellercentral.amazon.co.uk/help/hub/reference/G200333160">https://sellercentral.amazon.co.uk/help/hub/reference/G200333160.</a></div>
+            <div style="margin-bottom: 5px;"><span style="font-weight: bold;padding-bottom: 2px;">Dormant Accounts</span><br/>Once your account has been open, it is important to start listing items within the first 30 days. If your account is "inactive" it may cause your account to downgrade to an individual plan (instead of a premium plan). If you change it back, you may be subject to a lengthy verification procedure. We are not responsible for your account should you let it fall dormant. We will not be able to be of assistance if you don’t pass the secondary verification process!</div><br/>
+            <div>
+                <div style="font-weight: bold;margin-bottom: 1px;">Some final notes:</div>
+                <ul class="checkMark">
+                    <table style="padding-left:20px;margin-left:25px;padding-top:0px;margin-top:0px;">
+                        <tr>
+                            <td style="border-width: 0px;"><apex:image url="{!$Resource.AccountDeliveryCheckMark}" width="25" height="14"/></td>
+                            <td style="border-width: 0px;">Familiarize yourself with all aspects of the Seller’s Dashboard</td>
+                        </tr>
+                        <tr>
+                            <td style="border-width: 0px;text-align: top;padding-top: 0px;margin-top: 0px;padding-bottom: 18px;margin-bottom: 18px;"><apex:image url="{!$Resource.AccountDeliveryCheckMark}" width="25" height="14"/></td>
+                            <td style="border-width: 0px;">Keep your seller account healthy by monitoring your Performance Dashboard and your Account Health Dashboard</td>
+                        </tr>
+                        <tr>
+                            <td style="border-width: 0px;"><apex:image url="{!$Resource.AccountDeliveryCheckMark}" width="25" height="14"/></td>
+                            <td style="border-width: 0px;">Respond to all customer messages, reviews and feedback within 24 hours</td>
+                        </tr>
+                    </table>
+                    <!--li><apex:image style="padding-top:4px;margin-top:4px;" url="{!$Resource.AccountDeliveryCheckMark}" width="25" height="24"/>Keep your seller account healthy by monitoring your Performance Dashboard and your Account Health Dashboard</li>
+                    <li><apex:image url="{!$Resource.AccountDeliveryCheckMark}" width="25" height="24"/>Respond to all customer messages, reviews and feedback within 24 hours</li-->
+                </ul>
+            </div><br/>
+            <div>
+                Once you have received this documentation, with your seller credentials, the account is yours and ready for selling. Account suspensions, verification procedures or other seller violations are not included in this service; we are not responsible for seller violations, further verification checks, restricted listings etc.<br/><br/>
+                Should you have any questions about your Amazon account, or need any additional assistance, our customer success team is always happy to help. You can reach our team by sending an email to <a style="color: #4D36FF;" href="customer-service@aia-assets.com">customer-service@aia-assets.com.</a><br/><br/>
+                We hope that you had a wonderful experience opening your new seller account with AIA! Visit our website at <a style="color: ##4D36FF;" href="https://aia-assets.com/">aia-assets.com</a> or join our <a style="color: #4D36FF;" href="https://www.facebook.com/AIA.Assets/">FACEBOOK</a> group to get valuable information about the changing landscape of Amazon.<br/><br/><br/>
+                Congratulations and good luck on your new endeavor!<br/><br/>
+                Your Team at AIA
+            </div><div style="page-break-after: always"/>
+            
+            <div style="margin-top:20px;padding-top: 0px;">
+                Dear Seller,<br/><br/>To keep your seller information private, and to ensure that no one has access to your account, Amazon requires all sellers create a Two-Step Verification process, also called an OTP to access their seller account. <span style="font-weight: bold;">Note:</span> Authenticator apps don't have access to your Seller Central password or account information – in other words, you can use this app for any website that requests Two-Step Verification (OTP).<br/><br/>
+                You will need to use an authenticator app to log into your Amazon account. Using an authenticator app does not require phone service or an Internet connection to work, but must be downloaded to the device you choose.<br/><br/>
+                <span style="font-weight: bold;">What app should You Use?</span><br/>If you're using an iOS or Android device, you can download Microsoft Authenticator or Google Authenticator from your respective app store. (The app will need access to your camera to work).
+            </div>
+            <!--div style="font-weight: bold;">How do I use the app?</div-->
+            <p style="font-weight: bold;">
+                How do I use the app?
+            </p>
+            <table style="margin-top: 15px;margin-left: 0px;padding-left: 0px">
+                <tr>
+                    <td style="border-width: 0;text-align: left;width:32%;"><apex:image url="{!$Resource.AccountDelivery2factorAuth}" width="314" height="299"/></td>
+                <td style="border-width: 0;font-weight:normal;width:68%;line-height: 1.29;">
+                    <span>1. Open the authenticator app on your device and add a new account. The device's camera will activate. Use it to scan the <span style="font-weight: bold;">QR code</span> that is printed on your Amazon Seller instruction sheet that we have provided.</span><br/>
+                    <span>2. Using your user name and password, log in to your Seller Central Account https://sellercentral.amazon.com/</span><br/>
+                    <span>3. Open the authenticator app to see the randomly generated One Time Password (OTP).</span><br/>
+                    <span>4. Enter the OTP on the log-in screen.</span><br/>
+                    <span>5. You will now be able to log in to your account.</span><br/>  
+            </td>
+        </tr>   
+        
+    </table>
+    <div>
+        Should you have any questions about your Amazon account, or need any additional assistance, our customer success team is always happy to help. You can reach our team by sending an email to <a style="color: #4D36FF;" href="mailto:customer-service@aia-assets.com">customer-service@aia-assets.com.</a><br/><br/>Your Team at AIA
+    </div>
+</div>
+</apex:form>
+</apex:page>

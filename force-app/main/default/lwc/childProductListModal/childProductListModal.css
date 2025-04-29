@@ -1,0 +1,14 @@
+.slds-box .slds-p-around_medium{
+    height : 222px;
+    line-height: 21px;
+}
+
+.slds-align_absolute-center{
+    width: 171px;
+    height: 44px;
+    margin-top: 10px;
+}
+
+.slds-form-element__label {
+    font-weight: bold;
+}

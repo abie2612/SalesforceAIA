@@ -1,0 +1,190 @@
+<!--
+   @description       : Modal to filter products on various filters elements 
+   @author            : Adam Chauhan 
+   -->
+   <template>
+    <!--modal corresponding to filter button-->
+    <!-- modal start -->
+    <template if:true={isShowModal}>
+       <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+          <div class="slds-modal__container">
+             <!-- modal header start -->
+             <header class="slds-modal__header" title="Filter Criteria">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hidingFilterModal}>
+                   <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small"></lightning-icon>
+                   <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Filter Criteria</h2>
+             </header>
+             <!-- modal body start -->
+             <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                <div style="min-width: 225px; border-right: 1px solid #e7e7e7;">
+                   <div class="slds-box slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+                      <div class="slds-align_absolute-center slds-box">
+                         <lightning-input type="checkbox" name="LLC_Asset__c" checked={llcAssetTypeValue} options={llcAssetOptions} label="LLC+Asset" onchange={handlellcAsset}> </lightning-input>
+                      </div>
+                      <lightning-layout multiple-rows>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-checkbox-group
+                                  name="Account_Type__c"
+                                  label="AIA Account Type"
+                                  value={aiaAccountTypeValue}
+                                  options={aiaAccountTypeOptions}
+                                  onchange={handleAIAAccountType} ></lightning-checkbox-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-checkbox-group
+                                  name="Special_Account_Type__c"
+                                  label="Special Account Type"
+                                  value={specialAccountTypeValue}
+                                  options={specialAccountTypeOptions}
+                                  onchange={handleSpecialAccountType} ></lightning-checkbox-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-radio-group
+                                  class="feedback"
+                                  name="Feedback__c"
+                                  label="Feedback"
+                                  value={feedbackValue}
+                                  options={feedbackOptions}
+                                  type="radio"
+                                  onchange={handleFeedback} ></lightning-radio-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-input class="labelStyle"
+                                  name="Brands_approved__c"
+                                  label="Brands"
+                                  type="search"
+                                  value={brandQueryTerm}
+                                  onchange={handleBrand}
+                                  ></lightning-input>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-input class="labelStyle"
+                                  name="Categories_Approved__c"
+                                  label="Category"
+                                  type="search"
+                                  value={categoryQueryTerm}
+                                  onchange={handleCategory}
+                                  ></lightning-input>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-input class="labelStyle"
+                                  name="ASINs_approved__c"
+                                  label="ASIN"
+                                  type="search"
+                                  value={asinQueryTerm}
+                                  onchange={handleASIN}
+                                  ></lightning-input>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-checkbox-group
+                                  name="Marketplace__c"
+                                  label="Marketplace"
+                                  value={marketplaceValue}
+                                  options={marketOptions}
+                                  onchange={handleMarketplace} ></lightning-checkbox-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-checkbox-group
+                                  name="RecentSales"
+                                  label="Recent Sales"
+                                  value={recentSalesValue}
+                                  options={recentSalesOptions}
+                                  onchange={handleRecentSales} ></lightning-checkbox-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-radio-group
+                                  name="Overall_Units_Sold__c"
+                                  label="Number of Sales"
+                                  value={numberOfSalesValue}
+                                  options={numberOfSalesOptions}
+                                  type="radio"
+                                  onchange={handleNumberOfSales} ></lightning-radio-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-checkbox-group
+                                  name="Amazon_Account_Type__c"
+                                  label="Amazon Account Type"
+                                  value={amazonAccountTypeValue}
+                                  options={amazonAccountTypeOptions}
+                                  onchange={handleAmazonAccountType} ></lightning-checkbox-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-checkbox-group
+                                  name="Brand_Registry__c"
+                                  label="Brand Registry"
+                                  value={brandRegistryValue}
+                                  options={brandRegistryOptions}
+                                  onchange={handleBrandRegistry} ></lightning-checkbox-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-checkbox-group
+                                  name="Hazmat__c"
+                                  label="Hazmat"
+                                  value={hazmatValue}
+                                  options={hazmatOptions}
+                                  onchange={handleHazmat} ></lightning-checkbox-group>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-input class="labelStyle"
+                                  type="number" 
+                                  name="Health_Assurance_Score__c"
+                                  label="Health Assurance Eligible" 
+                                  value={healthAssuranceScoreValue}
+                                  onchange={handleHealthAssuranceScore}>
+                               </lightning-input>
+                            </div>
+                         </lightning-layout-item>
+                         <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="4" padding="around-small">
+                            <div class="slds-box slds-p-around_medium">
+                               <lightning-checkbox-group
+                                  name="Non_Amazon_Platform__c"
+                                  label="Non-Amazon platform"
+                                  value={nonAmazonPlatformValue}
+                                  options={nonAmazonPlatformOptions}
+                                  onchange={handleNonAmazonPlatform} ></lightning-checkbox-group>
+                            </div>
+                         </lightning-layout-item>
+                      </lightning-layout>
+                   </div>
+                </div>
+             </div>
+             <!--Modal Footer Start-->
+             <footer class="slds-modal__footer">
+                <div class="slds-grid slds-grid_align-center">
+                   <lightning-button  class="slds-m-left_x-small" variant="brand" label="Apply Filters" onclick={handleFilterProduct}>Apply Filters</lightning-button>
+                   <lightning-button  class="slds-m-left_x-small" variant="destructive-text" label="Clear Filters" onclick={handleClearFilterProduct}>Clear Filters</lightning-button>
+                </div>
+             </footer>
+          </div>
+       </section>
+       <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+ </template>

@@ -1,0 +1,100 @@
+<template>
+    <div class="c-container">
+        <template lwc:if={isLoading}>
+            <div class="spinner-container slds-spinner_inline slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+        <template lwc:else>
+            <lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item padding="around-small" size="8">
+                        <lightning-input-field field-name="Access_Deposit_Methods__c" value={record.Access_Deposit_Methods__c} onchange={handleAccessDeposit}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+    
+                    <template lwc:if={record.Access_Deposit_Methods__c}>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Current_Deposit_Method_Name__c" value={record.Current_Deposit_Method_Name__c}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Current_Deposit_Method_Address__c" value={record.Current_Deposit_Method_Address__c}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Current_Deposit_Method_Last_3_Digits__c" value={record.Current_Deposit_Method_Last_3_Digits__c}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Current_Deposit_Method_Marketplaces__c" value={record.Current_Deposit_Method_Marketplaces__c}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Access_Manage_Deposit_Methods_Page__c" value={record.Access_Manage_Deposit_Methods_Page__c}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Name_of_CallHippo_number__c" disabled>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="CallHippo_phone_number__c" disabled>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8" >
+                            <lightning-input type="file" label="Screenshot of Manage Deposit Methods Page Old"
+                                onchange={screenshotManageDeposit}></lightning-input>
+                            <span lwc:if={manageDepositNameShow}>{manageDepositNameShow}</span>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Add_New_Deposit_Method__c" value={record.Add_New_Deposit_Method__c} required onchange={handleAddNewDeposit}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <template lwc:if={record.Add_New_Deposit_Method__c}>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Bank_Account_Holder_Name__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Bank_Account_Routing_Number__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Bank_Account_Number_1__c" disabled>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8" >
+                                <lightning-layout>
+                                    <lightning-layout-item size="3">
+                                        <label class="slds-form-element__label slds-no-flex slds-form-element_horizontal">Bank statement</label>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="1">
+                                        <lightning-helptext content="ONLY recent monthly transaction statements are accepted unless it's a Payoneer statement. Statement details need to match legal entity."></lightning-helptext>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="8">
+                                        <a href={bankStatementFile.url} download lwc:if={bankStatementFile}>{bankStatementFile.label}</a>
+								        <span lwc:else>No Bank Statement</span>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Bank_Verification_Required__c" value={record.Bank_Verification_Required__c}>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8">
+                                <lightning-input-field field-name="Previous_Bank_Accounts_Deleted__c" value={record.Previous_Bank_Accounts_Deleted__c} required>
+                                </lightning-input-field>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="8" >
+                                <lightning-input type="file" label="Screenshot of Manage Deposit Methods Page New"
+                                    onchange={screenshotManageDepositNew} required></lightning-input>
+                                <span lwc:if={manageNewDepositNameShow}>{manageNewDepositNameShow}</span>
+                            </lightning-layout-item>            
+                        </template>
+                    </template>
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </template>
+	</div>
+</template>

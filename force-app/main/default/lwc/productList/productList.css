@@ -1,0 +1,116 @@
+.boxcustom{
+	margin-bottom: 15px;
+}
+
+.slds-float_right, .slds-float--right {
+    float: right;
+    position: relative;
+    top: -24px;
+}
+
+.product-card{
+	margin: 20px 10px;
+}
+
+.custom-box{
+  word-wrap: break-word;
+}
+
+.slds-modal__container{
+	max-width: 75% !important;
+	width:100% !important;
+}
+
+.pagination-UI {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.pagination-UI button {
+	cursor: pointer;
+	padding: 10px;
+	margin: 5px;
+	border-radius: 2px;
+	border:none;
+}
+
+.productBox {
+	position: relative;
+  border : 1px solid black;
+  z-index:1;
+  overflow: hidden;
+}
+
+.productBox::before {
+	content: '';
+	padding: 50px;
+	position: absolute;
+	border: 1px solid black;
+	background-color: #70ad47;
+	z-index:0;
+	width: 50px;
+  height: 50px;
+  top: -51px;
+  right: 191px;
+	transform: rotate(45deg);
+  border: none;
+  }
+
+  .topright{
+	transform: rotate(-405deg);
+    position: absolute;
+    top: 14px;
+    right: 189px;
+    font-size: 9px;
+    line-height: .8;
+    color: white;
+  }
+
+  .slds-align_absolute-center {
+    padding-top: 55px;
+    align-items: normal;
+  }
+
+  .spinnerHolder{
+    position: relative;
+    display: inline-block;
+    margin-left: 15px;
+    width: 55px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .slds-visual-picker input:checked~label .slds-visual-picker__text{
+    border-color: #70ad47;
+    border-width: 3px;
+    box-shadow: var(--slds-g-color-border-brand-2, #70ad47); 
+  }
+
+  .slds-visual-picker .slds-visual-picker__text:hover{
+    border-color: #70ad47;
+    border-width: 3px;
+    box-shadow: var(--slds-g-color-border-brand-2, #70ad47); 
+  }
+
+  .slds-visual-picker input:checked~label .slds-visual-picker__text:after{
+    border-right-color: #70ad47;
+    border-top-color: #70ad47;
+  }
+
+  .productBox:after{
+    border-radius: 0px!important;
+  }
+
+  .countCombo{
+    padding-bottom: 15px;
+    padding-right: 5px;
+  }
+
+  .slds-grid_vertical-align-start{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+  }

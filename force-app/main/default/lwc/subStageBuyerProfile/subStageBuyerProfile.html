@@ -1,0 +1,76 @@
+<template>
+    <div class="c-container">
+        <template lwc:if={isLoading}>
+            <div class="spinner-container slds-spinner_inline slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+            </div>
+        </template>
+        <template lwc:else>
+            <lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+                <lightning-layout multiple-rows="true">
+                    <lightning-layout-item padding="around-small" size="8">
+                        <lightning-input-field field-name="Access_Buyer_Account__c"
+                            value={record.Access_Buyer_Account__c} onchange={handleAccessBuyerAccount}>
+                        </lightning-input-field>
+                    </lightning-layout-item>
+
+                    <template lwc:if={record.Access_Buyer_Account__c}>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Close_Business_Account__c"
+                                value={record.Close_Business_Account__c}>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Change_Login_Name__c" value={record.Change_Login_Name__c}
+                                required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Company_Name__c" disabled>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Change_Account_Profile_Name__c"
+                                value={record.Change_Account_Profile_Name__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Remove_Other_Profiles__c"
+                                value={record.Remove_Other_Profiles__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Amazon_Password__c" disabled>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Amazon_QR_Code__c" disabled>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Deleted_all_other_Deposit_Methods__c"
+                                value={record.Deleted_all_other_Deposit_Methods__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Deleted_All_other_Charge_Methods__c"
+                                value={record.Deleted_All_other_Charge_Methods__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8" >
+                            <lightning-input type="file" label="Screenshot of All Existing Addresses"
+                                onchange={screenshotExistingAddress} required></lightning-input>
+                            <span lwc:if={existingAddressNameShow}>{existingAddressNameShow}</span>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="8">
+                            <lightning-input-field field-name="Deleted_All_other_Addresses__c"
+                                value={record.Deleted_All_other_Addresses__c} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+
+                    </template>
+                </lightning-layout>
+            </lightning-record-edit-form>
+        </template>
+    </div>
+</template>

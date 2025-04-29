@@ -1,0 +1,461 @@
+<template>
+	<lightning-quick-action-panel>
+		<div class="slds-m-around_large">
+			<lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+				<template for:each={steps} for:item="step">
+					<lightning-progress-step label={step.label} value={step.value} key={step.label}>
+					</lightning-progress-step>
+				</template>
+			</lightning-progress-indicator>
+		</div>
+		<template if:true={isStepOne}>
+			<template if:false={isLoading}>
+				<lightning-record-edit-form object-api-name={objectApiName} record-id={recordId}>
+					<div class="slds-p-left_large slds-p-bottom_xx-large slds-col slds-size_2-of-3">
+						<lightning-input-field field-name="VPS3__c" value={record.VPS3__c} onchange={handleVPSCheck}>
+						</lightning-input-field>
+						<template if:true={record.VPS3__c}>
+							<div class="slds-m-vertical_medium">
+								<lightning-input-field field-name="Accessed_Amazon_Account_1__c"
+									value={record.Accessed_Amazon_Account_1__c} required="true"></lightning-input-field>
+								<lightning-input-field field-name="Email_Address_On_Live_Takeover__c"
+									value={record.Email_Address_On_Live_Takeover__c} disabled>
+								</lightning-input-field>
+								<lightning-input-field field-name="Amazon_Password__c" value={record.Amazon_Password__c}
+									disabled>
+								</lightning-input-field>
+								<lightning-input-field field-name="Temp_Amazon_2SV_QR_code__c"
+									value={record.Temp_Amazon_2SV_QR_code__c} disabled>
+								</lightning-input-field>
+								<lightning-input-field field-name="Put_account_into_vacation_mode__c"
+									value={record.Put_account_into_vacation_mode__c}></lightning-input-field>
+								<lightning-input-field field-name="Added_2SV_QR_code_Final__c"
+									value={record.Added_2SV_QR_code_Final__c} onchange={handleAddedQRCodeFinal}
+									required="true"></lightning-input-field>
+								<template if:true={record.Added_2SV_QR_code_Final__c}>
+									<div class="slds-col">
+										<lightning-input-field field-name="Amazon_QR_Code__c"
+											value={record.Amazon_QR_Code__c} required onchange={finalAmazonQRChange}>
+										</lightning-input-field>
+									</div>
+								</template>
+								<template if:false={record.Added_2SV_QR_code_Final__c}>
+									<div class="slds-m-vertical_medium">
+									</div>
+								</template>
+								<lightning-input-field field-name="Changed_phone_number_in_login_settings__c"
+									value={record.Changed_phone_number_in_login_settings__c}
+									onchange={handlePhoneNumberLogin} required="true"></lightning-input-field>
+								<template if:true={record.Changed_phone_number_in_login_settings__c}>
+									<lightning-input-field field-name="CallHippo_phone_number__c" disabled="true">
+									</lightning-input-field>
+									<lightning-input-field field-name="Added_AIA_as_a_user_in_Amazon_Account__c"
+										value={record.Added_AIA_as_a_user_in_Amazon_Account__c} required="true">
+									</lightning-input-field>
+									<lightning-input-field field-name="Remove_existing_users_from_permissions__c"
+										value={record.Remove_existing_users_from_permissions__c}>
+									</lightning-input-field>
+									<lightning-input-field field-name="Disabled_Third_party_developer_and_apps__c"
+										value={record.Disabled_Third_party_developer_and_apps__c}>
+									</lightning-input-field>
+									<lightning-input-field field-name="Changed_charge_method_to_Mercury_cc__c"
+										value={record.Changed_charge_method_to_Mercury_cc__c} required="true">
+									</lightning-input-field>
+									<lightning-input-field field-name="Took_Screenshot_of_updated_charge_method__c"
+										value={record.Took_Screenshot_of_updated_charge_method__c}
+										onchange={handleScreenShotUpdation} required="true"></lightning-input-field>
+									<template if:true={record.Took_Screenshot_of_updated_charge_method__c}>
+										<div
+											class="slds-grid slds-wrap slds-gutters slds-grid_vertical-align-center slds-grid_align-spread">
+											<div class="slds-col slds-size_1-of-2">
+												<lightning-input type="file" accept=".png, .jpg, .jpeg"
+													label="Charge Methods screenshot" onchange={openfileUpload1}
+													required="true"></lightning-input>
+												<span lwc:if={chargeFileNameShow}
+													class="slds-p-left_small">{chargeFileNameShow}</span>
+											</div>
+											<template if:true={screenShotBoolean}>
+												<lightning-input-field
+													field-name="Changed_All_Notification_Email_addresses__c"
+													value={record.Changed_All_Notification_Email_addresses__c}
+													required="true"></lightning-input-field>
+												<lightning-input-field field-name="Changed_Contact_Info_email_phone__c"
+													value={record.Changed_Contact_Info_email_phone__c} required="true">
+												</lightning-input-field>
+												<lightning-input-field field-name="Email_Address_On_Live_Takeover__c"
+													value={record.Email_Address_On_Live_Takeover__c} disabled>
+												</lightning-input-field>
+												<lightning-input-field field-name="Paused_all_active_ad_campaigns__c"
+													value={record.Paused_all_active_ad_campaigns__c}
+													onchange={handlePausedActiveAdCampaigns}></lightning-input-field>
+												<template if:true={record.Paused_all_active_ad_campaigns__c}>
+													<lightning-input-field
+														field-name="Noted_performance_notifications__c"
+														value={record.Noted_performance_notifications__c}>
+													</lightning-input-field>
+													<lightning-input-field
+														field-name="Took_screenshot_of_Acc_Health_Dashboard__c"
+														value={record.Took_screenshot_of_Acc_Health_Dashboard__c}
+														onchange={handleScreenShotofAccountHealthDashboard}
+														required="true"></lightning-input-field>
+													<template
+														if:true={record.Took_screenshot_of_Acc_Health_Dashboard__c}>
+														<div class="slds-col slds-size_1-of-2">
+															<lightning-input type="file" accept=".png, .jpg, .jpeg"
+																label="Account Health Dashboard Screenshot"
+																onchange={accountHealthDashboardScreenShot}
+																required="true"></lightning-input>
+															<span lwc:if={accFileNameShow}
+																class="slds-p-left_small">{accFileNameShow}</span>
+														</div>
+													</template>
+
+													<lightning-input-field
+														field-name="Existing_account_health_violations__c"
+														value={record.Existing_account_health_violations__c}
+														onchange={handleExistingAccountHealth}>
+													</lightning-input-field>
+													<template lwc:if={record.Existing_account_health_violations__c}>
+														<lightning-input-field field-name="Comment__c"
+															value={record.Comment__c}>
+														</lightning-input-field>
+														<div class="slds-col slds-size_1-of-2">
+															<lightning-input type="file"
+																label="Please upload screenshots/documents related to the existing violation(s)"
+																onchange={handleUploadExistingViolation}></lightning-input>
+															<span lwc:if={existingViolationFileNameShow}
+																class="slds-p-left_small">{existingViolationFileNameShow}</span>
+														</div>
+													</template>
+													<lightning-input-field field-name="Accessed_Buyer_Account__c"
+														value={record.Accessed_Buyer_Account__c}>
+													</lightning-input-field>
+													<lightning-input-field field-name="Removed_all_subscriptions__c"
+														value={record.Removed_all_subscriptions__c} required="true">
+													</lightning-input-field>
+													<lightning-input-field field-name="Returned_to_Seller_Account__c"
+														value={record.Returned_to_Seller_Account__c}>
+													</lightning-input-field>
+													<lightning-input-field
+														field-name="Asset_purchased_with_Pesticide_approval__c"
+														value={record.Asset_purchased_with_Pesticide_approval__c}
+														onchange={handleAssetPesticideApproval}>
+													</lightning-input-field>
+													<template
+														if:false={record.Asset_purchased_with_Pesticide_approval__c}>
+														<lightning-input-field
+															field-name="AIA_has_opened_Pesticide_category__c"
+															value={record.AIA_has_opened_Pesticide_category__c}>
+														</lightning-input-field>
+													</template>
+												</template>
+											</template>
+										</div>
+									</template>
+								</template>
+							</div>
+						</template>
+					</div>
+				</lightning-record-edit-form>
+			</template>
+			<template if:true={isLoading}>
+				<div class="slds-spinner_container_fullscreen slds-is-absolute">
+					<lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+				</div>
+			</template>
+		</template>
+		<template if:true={isStepTwo}>
+			<template if:false={isLoading}>
+				<div class="slds-p-left_large slds-p-bottom_xx-large">
+					<lightning-record-edit-form object-api-name={objectApiName} record-id={recordId}>
+						<div>
+							<lightning-layout multiple-rows="true">
+								<lightning-layout-item size="6">
+									<lightning-input-field field-name="Earliest_account_statement_date__c"
+										value={record.Earliest_account_statement_date__c}
+										onchange={handleEarliestAccStatementDate} required></lightning-input-field>
+								</lightning-layout-item>
+								<template if:true={checkEarliestAccStatementDate}>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Add_ASINs_to_check_brands_or_categories__c"
+											value={record.Add_ASINs_to_check_brands_or_categories__c} required>
+										</lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Date_of_Last_Sale__c"
+											value={record.Date_of_Last_Sale__c}>
+										</lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="8" style="padding-bottom:16px">
+										<lightning-input type="file" label="Screenshot of latest orders " style="padding: 0px 0px;"
+											onchange={latestOrdersFile}></lightning-input>
+										<span lwc:if={latestOrderFileName} class="slds-p-left_small">{latestOrderFileName}</span>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Check_for_HAZMAT_storage__c"
+											value={record.Check_for_HAZMAT_storage__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Retrieved_sales_history_data__c"
+											value={record.Retrieved_sales_history_data__c} required>
+										</lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="12">
+										<lightning-layout multiple-rows="true">
+											<lightning-layout-item size="6">
+												<lightning-input-field field-name="Sales_History_Year_to_Date__c"
+													value={record.Sales_History_Year_to_Date__c}></lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item size="6">
+												<lightning-input-field field-name="Units_Sold_Year_to_Date__c"
+													value={record.Units_Sold_Year_to_Date__c}></lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item size="6">
+												<lightning-input-field field-name="Sales_History_2_Years_to_Date__c"
+													value={record.Sales_History_2_Years_to_Date__c}></lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item size="6">
+												<lightning-input-field field-name="Unit_Sold_2_Years_to_Date__c"
+													value={record.Unit_Sold_2_Years_to_Date__c}></lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item size="6">
+												<lightning-input-field field-name="Sales_History_All_Time__c"
+													value={record.Sales_History_All_Time__c}></lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item size="6">
+												<lightning-input-field field-name="Overall_Units_Sold__c"
+													value={record.Overall_Units_Sold__c}></lightning-input-field>
+											</lightning-layout-item>
+										</lightning-layout>
+									</lightning-layout-item>
+
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="IPI__c"
+											value={record.IPI__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Fulfillment__c"
+											value={record.Fulfillment__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Recent_Sales_Within_3_months__c"
+											value={record.Recent_Sales_Within_3_months__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Prime_Memebership_Expiration__c"
+											value={record.Prime_Memebership_Expiration__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Brand_Registry__c"
+											value={record.Brand_Registry__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Gift_card_balance__c"
+											value={record.Gift_card_balance__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="INFORM_Verifications_passed__c"
+											value={record.INFORM_Verifications_passed__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="INFORM_Verification_passed_date__c"
+											value={record.INFORM_Verification_passed_date__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Tax_Info_complete__c"
+											value={record.Tax_Info_complete__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Listings_Status__c"
+											value={record.Listings_Status__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Health_Assurance_Score__c"
+											value={record.Health_Assurance_Score__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Positive_Feedback_USA__c"
+											value={record.Positive_Feedback_USA__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Amazon_Login_Email_Address__c"
+											value={record.Amazon_Login_Email_Address__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Email_Address_On_Live_Takeover__c"
+											value={record.Email_Address_On_Live_Takeover__c} disabled>
+										</lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="CallHippo_phone_number__c" disabled="true">
+										</lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Bank_Account_Number_last_three_digits__c"
+											value={record.Bank_Account_Number_last_three_digits__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Legal_Entity_Address__c"
+											value={record.Legal_Entity_Address__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Bank_Account_name__c"
+											value={record.Bank_Account_name__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Legal_Entity_Name__c"
+											value={record.Legal_Entity_Name__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Bank_Account_Address__c"
+											value={record.Bank_Account_Address__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Legal_Entity_Owner_Status__c"
+											value={record.Legal_Entity_Owner_Status__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Bank_Account_Marketplaces__c"
+											value={record.Bank_Account_Marketplaces__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Legal_Entity_Street__c"
+											value={record.Legal_Entity_Street__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Card_Name__c"
+											value={record.Card_Name__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Legal_Entity_City__c"
+											value={record.Legal_Entity_City__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Credit_Card_last_four_digits__c"
+											value={record.Credit_Card_last_four_digits__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Legal_Entity_Country__c"
+											value={record.Legal_Entity_Country__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Credit_Card_Street__c"
+											value={record.Credit_Card_Street__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Legal_Entity_State_Province__c"
+											value={record.Legal_Entity_State_Province__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Credit_Card_City__c"
+											value={record.Credit_Card_City__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Legal_Entity_Zip_Postal_Code__c"
+											value={record.Legal_Entity_Zip_Postal_Code__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Credit_Card_State_Province__c"
+											value={record.Credit_Card_State_Province__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Contact_person_first_name__c"
+											value={record.Contact_person_first_name__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Credit_Card_Zip_Postal_Code__c"
+											value={record.Credit_Card_Zip_Postal_Code__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Contact_person_middle_name_opt__c"
+											value={record.Contact_person_middle_name_opt__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Credit_Card_Country__c"
+											value={record.Credit_Card_Country__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Contact_person_last_name__c"
+											value={record.Contact_person_last_name__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Credit_Card_Address__c"
+											value={record.Credit_Card_Address__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Phone_Number__c"
+											value={record.Phone_Number__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Creation_Date__c"
+											value={record.Creation_Date__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Marketplace__c"
+											value={record.Marketplace__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Additional_Marketplaces__c"
+											value={record.Additional_Marketplaces__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="US_Citizen_Owner__c"
+											value={record.US_Citizen_Owner__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Amazon_Account_Type__c"
+											value={record.Amazon_Account_Type__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Subscription_Plan__c"
+											value={record.Subscription_Plan__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Account_Type__c"
+											value={record.Account_Type__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Owner_Status__c"
+											value={record.Owner_Status__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Merchant_Token__c"
+											value={record.Merchant_Token__c}></lightning-input-field>
+									</lightning-layout-item>
+									<lightning-layout-item size="6">
+										<lightning-input-field field-name="Special_Account_Type__c"
+											value={record.Special_Account_Type__c}></lightning-input-field>
+									</lightning-layout-item>
+
+									<lightning-layout-item size="8">
+										<lightning-input type="file" accept=".pdf" label="Transaction Summary - 1 year "
+											onchange={txn1YearUpload} required="true"></lightning-input>
+										<span lwc:if={txn1NameShow} class="slds-p-left_small">{txn1NameShow}</span>
+									</lightning-layout-item>
+									<lightning-layout-item size="8">
+										<lightning-input type="file" accept=".pdf" label="Transaction Summary - 2 year "
+											onchange={txn2YearUpload} required="true"></lightning-input>
+										<span lwc:if={txn2NameShow} class="slds-p-left_small">{txn2NameShow}</span>
+									</lightning-layout-item>
+									<lightning-layout-item size="8">
+										<lightning-input type="file" accept=".xlsx, .xls"
+											label="Sales report (as far back as 2015) " onchange={salesReportUpload}
+											required="true"></lightning-input>
+										<span lwc:if={salesReportNameShow}
+											class="slds-p-left_small">{salesReportNameShow}</span>
+									</lightning-layout-item>
+								</template>
+								<template if:false={earliestAccountStatementDateBoolean}></template>
+							</lightning-layout>
+						</div>
+					</lightning-record-edit-form>
+				</div>
+			</template>
+			<template if:true={isLoading}>
+				<div class="slds-spinner_container_fullscreen slds-is-absolute">
+					<lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+				</div>
+			</template>
+		</template>
+	</lightning-quick-action-panel>
+</template>

@@ -1,0 +1,197 @@
+<template>
+	<div class="c-container">
+		<template lwc:if={isLoading}>
+			<div class="spinner-container slds-spinner_inline slds-align_absolute-center">
+				<lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+			</div>
+		</template>
+		<template lwc:else>
+			<lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+				<lightning-layout multiple-rows="true">
+					<lightning-layout-item padding="around-small" size="8">
+						<lightning-input-field field-name="Take_screenshot_of_Tax_Information__c"
+							value={record.Take_screenshot_of_Tax_Information__c} required>
+						</lightning-input-field>
+					</lightning-layout-item>
+					<lightning-layout-item padding="around-small" size="8">
+						<lightning-input type="file" label="Tax Information Screenshot"
+							onchange={uploadTaxInfoSS} required></lightning-input>
+						<span lwc:if={taxInfoNameShow}>{taxInfoNameShow}</span>
+					</lightning-layout-item>
+					<lightning-layout-item padding="around-small" size="8">
+						<lightning-input-field field-name="Change_Tax_Information__c"
+							value={record.Change_Tax_Information__c} onchange={handleTaxInformation} required>
+						</lightning-input-field>
+					</lightning-layout-item>
+
+					<template lwc:if={record.Change_Tax_Information__c}>
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Company_Name__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="US_Based_Company__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Company_Type__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="EIN_or_Registration_Number__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="TIN_EIN_formation_within_last_60_days__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Company_registration_date__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Business_Address__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Business_Address_City__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Business_Address_State__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Business_Address_Zip__c" disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+	
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-layout>
+								<lightning-layout-item size="4">
+									<label class="slds-form-element__label slds-no-flex slds-form-element_horizontal">EIN Document - </label>
+								</lightning-layout-item>
+								<lightning-layout-item size="8">
+									<a href={einFile.url} download lwc:if={einFile}>{einFile.label}</a>
+									<span lwc:else>No EIN document</span>	
+								</lightning-layout-item>
+							</lightning-layout>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Change_Legal_Entity_Information__c"
+								value={record.Change_Legal_Entity_Information__c} onchange={handleChangeLegalEntity} required>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Legal_Entity_Contains__c"
+								value={record.Legal_Entity_Contains__c} onchange={handleLegalEntity} required>
+							</lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-small" size="8" if:false={showBusinessAndConInfo}>
+							<lightning-input-field field-name="Primary_Contact_Verification__c"
+								value={record.Primary_Contact_Verification__c}>
+							</lightning-input-field>
+						</lightning-layout-item>
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Business_Primary_Contact_Verification__c"
+								value={record.Business_Primary_Contact_Verification__c}>
+							</lightning-input-field>
+						</lightning-layout-item>
+						
+						<template lwc:if={record.Change_Legal_Entity_Information__c}>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="First_Name__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Middle_Name__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Last_Name__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Date_of_Birth_Day__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Date_of_Birth_month__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Date_of_Birth_Year__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Passport_License_Number__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Passport_License_Expiration_Date__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="ID_Country_of_Issue__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Home_Address__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Street_Address_line_2__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Home_Address_City__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Home_Address_State__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Home_Address_Zip_Code__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Home_Address_Country__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Google_recovery_Email_Address__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Google_recovery_Phone_Number__c" disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-layout>
+									<lightning-layout-item size="4">
+										<label class="slds-form-element__label slds-no-flex slds-form-element_horizontal">ID Document - </label>									</lightning-layout-item>
+									<lightning-layout-item size="8">
+										<a href={idFile.url} download lwc:if={idFile}>{idFile.label}</a>
+										<span lwc:else>No ID document</span>
+									</lightning-layout-item>
+								</lightning-layout>
+							</lightning-layout-item>
+						</template>
+					</template>
+				</lightning-layout>
+			</lightning-record-edit-form>
+		</template>
+	</div>
+</template>

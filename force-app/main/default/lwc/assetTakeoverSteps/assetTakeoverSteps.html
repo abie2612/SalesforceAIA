@@ -1,0 +1,17 @@
+<template>
+	<template if:true={isVPS}>
+		<c-sub-stage-v-p-s onisvalidornot={isValidOrNot} opp-id={opportunityId}></c-sub-stage-v-p-s>
+	</template>
+	<template if:true={isCallHippo}>
+		<c-sub-stage-call-hippo onisvalidornot={isValidOrNot} opp-id={opportunityId}></c-sub-stage-call-hippo>
+	</template>
+	<template if:true={isMercuryCC}>
+		<c-sub-stage-mercury-c-c onisvalidornot={isValidOrNot} opp-id={opportunityId}></c-sub-stage-mercury-c-c>
+	</template>
+	<template if:true={isEmailAccount}>
+		<c-sub-stage-email-account onisvalidornot={isValidOrNot} ongetcheckbox={handleCheckbox} ongetrecord={handleGetRecord} opp-id={opportunityId}></c-sub-stage-email-account>
+	</template>
+	<template if:true={isLiveTakeover}>
+		<c-sub-stage-live-takeover onisvalidornot={isValidOrNot} existing-email={hideDetails} existing-record={record} opp-id={opportunityId}></c-sub-stage-live-takeover>
+	</template>
+</template>

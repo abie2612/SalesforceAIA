@@ -1,0 +1,42 @@
+<template>
+	<div class="main-container-div">
+		<lightning-quick-action-panel>
+			<div class="slds-m-vertical_medium custom-progress-bar-indicator custom-path">
+				<lightning-progress-indicator type="path" variant="base" current-step={currentStep}>
+					<template for:each={steps} for:item="step" for:index="index">
+						<lightning-progress-step key={step.Name} label={step.Name} value={step.value}>
+						</lightning-progress-step>
+					</template>
+				</lightning-progress-indicator>
+			</div>
+			<div if:false={isLoading}>
+				<div class="container slds-m-vertical_medium slds-p-bottom_xx-medium">
+					<c-sub-stage-help-tickets onisvalidornot={isValidOrNot} opp-id={recordId}
+						lwc:if={isHelpTickets}></c-sub-stage-help-tickets>
+					<c-sub-stage-tax-and-legal onisvalidornot={isValidOrNot} opp-id={recordId}
+						lwc:if={taxAndLegal}></c-sub-stage-tax-and-legal>
+					<c-sub-stage-deposit-method onisvalidornot={isValidOrNot} opp-id={recordId}
+						lwc:if={depositMethod}></c-sub-stage-deposit-method>
+					<c-sub-stage-seller-profile onisvalidornot={isValidOrNot} opp-id={recordId}
+						lwc:if={sellerProfile}></c-sub-stage-seller-profile>
+					<c-sub-stage-charge-method onisvalidornot={isValidOrNot} opp-id={recordId}
+						lwc:if={chargeMethod}></c-sub-stage-charge-method>
+					<c-sub-stage-buyer-profile onisvalidornot={isValidOrNot} opp-id={recordId}
+						lwc:if={buyerProfile}></c-sub-stage-buyer-profile>
+					<c-sub-stage-amazon-credentials onisvalidornot={isValidOrNot} opp-id={recordId}
+						lwc:if={amazonCreds}></c-sub-stage-amazon-credentials>
+					<c-sub-stage-email-account-credentials onisvalidornot={isValidOrNot} opp-id={recordId}
+						lwc:if={emailAccountCreds}></c-sub-stage-email-account-credentials>
+	
+				</div>
+			</div>
+		</lightning-quick-action-panel>
+	</div>
+	<div class="slds-is-relative">
+		<template if:true={isLoading}>
+			<div class="slds-spinner_container_fullscreen slds-is-absolute">
+				<lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+			</div>
+		</template>
+	</div>
+</template>

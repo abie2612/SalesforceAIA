@@ -1,0 +1,11 @@
+<template>
+    <div class="slds-var-p-around_medium custom-progress-bar-indicator" style="background-color: white;border-radius:4px;" lwc:if={isLoading}>
+        <lightning-progress-indicator type="path" variant="base" current-step={currentStep}>
+            <template for:each={leadStages} for:item="stage" for:index="index">
+                <lightning-progress-step key={stage} label={stage} value={stage} onstepfocus={handleStepFocus}>
+                </lightning-progress-step>
+            </template>
+            <lightning-button icon-name="utility:check" label={buttonLabel} variant="brand" class="slds-m-left_x-large" onclick={handleStepChange} disabled={isDisabled}></lightning-button>
+        </lightning-progress-indicator>
+    </div>
+</template>

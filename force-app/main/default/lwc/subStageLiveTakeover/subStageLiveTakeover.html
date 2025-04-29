@@ -1,0 +1,355 @@
+<template>
+	<div class="c-container">
+		<template lwc:if={isLoading}>
+			<div class="spinner-container slds-spinner_inline slds-align_absolute-center">
+				<lightning-spinner alternative-text="Loading" size="large" variant="brand"></lightning-spinner>
+			</div>
+		</template>
+		<template lwc:else>
+			<lightning-record-edit-form record-id={oppId} object-api-name="Opportunity">
+				<lightning-layout multiple-rows="true">
+					<lightning-layout-item padding="around-small" size="8" lwc:if={existingEmailAccount}>
+						<lightning-input-field field-name="Vendor_PC__c" onchange={handleVendorPC}>
+						</lightning-input-field>
+					</lightning-layout-item>
+
+					<template lwc:else>
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Email_Address_On_Live_Takeover__c"
+								value={record.Email_Address_On_Live_Takeover__c} disabled> </lightning-input-field>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Email_Password__c" value={record.Email_Password__c}
+								disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Email_QR_code__c" value={record.Email_QR_code__c}
+								disabled>
+							</lightning-input-field>
+						</lightning-layout-item>
+					</template>
+
+					<template if:true={record.Vendor_PC__c}>
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Accessed_Email_Account__c"
+								value={record.Accessed_Email_Account__c} onchange={handleAccessedEmail} required>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<template if:true={record.Accessed_Email_Account__c}>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field data-name="EmailAddress"
+									field-name="Email_Address_On_Live_Takeover__c"
+									value={record.Email_Address_On_Live_Takeover__c} onchange={handleVendorPCEmail}
+									required> </lightning-input-field>
+							</lightning-layout-item>
+						</template>
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="AIA_recovery_email_address_added__c"
+								value={record.AIA_recovery_email_address_added__c} required>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Former_Email_Recovery_Phone_Number__c"
+								onchange={handleFormerEmail}>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8"
+							lwc:if={record.Former_Email_Recovery_Phone_Number__c}>
+							<lightning-input-field field-name="Recovery_phone_number_removed__c"
+								value={record.Recovery_phone_number_removed__c}> </lightning-input-field>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Set_up_2SV_by_phone_and_created_QR_by_PC__c"
+								value={record.Set_up_2SV_by_phone_and_created_QR_by_PC__c} onchange={handleTempQR}
+								required>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<template if:true={record.Set_up_2SV_by_phone_and_created_QR_by_PC__c}>
+							<lightning-layout-item padding="horizontal-small" size="8">
+								<lightning-input-field field-name="Email_QR_code__c" value={record.Email_QR_code__c}
+									required onchange={firstGmailQRChange}>
+								</lightning-input-field>
+							</lightning-layout-item>
+						</template>
+
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Changed_Gmail_password__c"
+								value={record.Changed_Gmail_password__c} onchange={handlePasswordChange} required>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8"
+							lwc:if={record.Changed_Gmail_password__c}>
+							<lightning-input-field data-name="EmailPasswordFinal" field-name="Email_Password__c"
+								value={record.Email_Password__c} onchange={handleEmailPassword} required>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="VPS1__c" value={record.VPS1__c}
+								onchange={handleVPSChange}>
+							</lightning-input-field>
+						</lightning-layout-item>
+
+						<template if:true={record.VPS1__c}>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Email_logged_into_on_new_VPS__c"
+									value={record.Email_logged_into_on_new_VPS__c} required>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Email_Address_On_Live_Takeover__c"
+									value={record.Email_Address_On_Live_Takeover__c} disabled> </lightning-input-field>
+							</lightning-layout-item>
+
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Email_Password__c" value={record.Email_Password__c}
+									disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Email_QR_code__c" value={record.Email_QR_code__c}
+									disabled>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Disconnected_other_devices_from_Gmail__c"
+									value={record.Disconnected_other_devices_from_Gmail__c} required>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Changed_Gmail_password_again_from_VPS__c"
+									value={record.Changed_Gmail_password_again_from_VPS__c}
+									onchange={handlePasswordChangeFinal} required>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<lightning-layout-item padding="around-small" size="8"
+								lwc:if={record.Changed_Gmail_password_again_from_VPS__c}>
+								<lightning-input-field field-name="Email_Password_Takeover_2__c"
+									value={record.Email_Password_Takeover_2__c}>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Removed_temp_2SV_QR_and_Added_new_One__c"
+									value={record.Removed_temp_2SV_QR_and_Added_new_One__c} onchange={handleFinalQR}
+									required>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<!-- Upload QR code -->
+							<template if:true={record.Removed_temp_2SV_QR_and_Added_new_One__c}>
+								<lightning-layout-item padding="horizontal-small" size="8">
+									<lightning-input-field field-name="Email_QR_Code_Takeover_2__c"
+										value={record.Email_QR_Code_Takeover_2__c} required
+										onchange={finalGmailQRChange}>
+									</lightning-input-field>
+								</lightning-layout-item>
+							</template>
+						</template>
+					</template>
+					<template if:true={showVendorScreenshare}>
+						<lightning-layout-item padding="around-small" size="8">
+							<lightning-input-field field-name="Vendor_PC_Screenshare1__c"
+								value={record.Vendor_PC_Screenshare1__c} onchange={handleVendorScreenshare}>
+							</lightning-input-field>
+						</lightning-layout-item>
+						<template if:true={record.Vendor_PC_Screenshare1__c}>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Accessed_Amazon_Account__c"
+									value={record.Accessed_Amazon_Account__c} required>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Removed_2SV_from_login_settings__c"
+									value={record.Removed_2SV_from_login_settings__c} required>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Added_2SV_QR_code_Temp__c"
+									value={record.Added_2SV_QR_code_Temp__c} onchange={handleTempAmznQR} required>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<template if:true={record.Added_2SV_QR_code_Temp__c}>
+								<lightning-layout-item padding="horizontal-small" size="8">
+									<lightning-input-field field-name="Temp_Amazon_2SV_QR_code__c"
+										value={record.Temp_Amazon_2SV_QR_code__c} onchange={tempAmazonQRChange}>
+									</lightning-input-field>
+								</lightning-layout-item>
+							</template>
+
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Former_Amazon_Phone_Number__c"
+									onchange={handleFormerAmazon}>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<lightning-layout-item padding="around-small" size="8"
+								lwc:if={record.Former_Amazon_Phone_Number__c}>
+								<lightning-input-field field-name="Removed_phone_number_from_2SV_settings__c"
+									value={record.Removed_phone_number_from_2SV_settings__c}>
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="CallHippo_phone_number__c"
+									value={record.CallHippo_phone_number__c} disabled="true">
+								</lightning-input-field>
+							</lightning-layout-item>
+							<lightning-layout-item padding="around-small" size="8">
+								<lightning-input-field field-name="Changed_Login_Password__c"
+									value={record.Changed_Login_Password__c} onchange={handleChangeAmznPass} required>
+								</lightning-input-field>
+							</lightning-layout-item>
+
+							<template if:true={record.Changed_Login_Password__c}>
+								<lightning-layout-item padding="around-small" size="8">
+									<lightning-input-field field-name="Amazon_Password__c"
+										value={record.Amazon_Password__c} onchange={handleFinalAmznPass} required>
+									</lightning-input-field>
+								</lightning-layout-item>
+							</template>
+							<template if:true={showVPSScreen}>
+								<lightning-layout-item padding="around-small" size="8">
+									<lightning-input-field field-name="VPS2__c" value={record.VPS2__c}
+										onchange={handleVPS2Change}>
+									</lightning-input-field>
+								</lightning-layout-item>
+								<template if:true={record.VPS2__c}>
+									<lightning-layout-item padding="around-small" size="8">
+										<lightning-input-field field-name="Logged_into_the_Amazon_Account__c"
+											value={record.Logged_into_the_Amazon_Account__c} onchange={handleLoggedIn}
+											required>
+										</lightning-input-field>
+									</lightning-layout-item>
+									<template if:true={record.Logged_into_the_Amazon_Account__c}>
+										<lightning-layout-item padding="around-small" size="8">
+											<lightning-input-field field-name="Email_Address_On_Live_Takeover__c"
+												value={record.Email_Address_On_Live_Takeover__c} disabled>
+											</lightning-input-field>
+										</lightning-layout-item>
+
+										<lightning-layout-item padding="around-small" size="8">
+											<lightning-input-field field-name="Amazon_Password__c"
+												value={record.Amazon_Password__c} disabled>
+											</lightning-input-field>
+										</lightning-layout-item>
+
+										<lightning-layout-item padding="around-small" size="8">
+											<lightning-input-field field-name="Temp_Amazon_2SV_QR_code__c"
+												value={record.Temp_Amazon_2SV_QR_code__c} disabled>
+											</lightning-input-field>
+										</lightning-layout-item>
+										<lightning-layout-item padding="around-small" size="8">
+											<lightning-input-field field-name="Vendor_PC_Screenshare2__c"
+												value={record.Vendor_PC_Screenshare2__c} onchange={handleVendorPC2}>
+											</lightning-input-field>
+										</lightning-layout-item>
+										<template if:true={record.Vendor_PC_Screenshare2__c}>
+											<!-- radio buttons new ticket Start-->
+											<lightning-layout-item padding="around-small" size="6">
+												<table>
+													<tr>
+														<td>
+															<label><abbr class="slds-required"
+																	title="required">*</abbr>3rd Button under
+																Payment
+																> Funds Available</label>
+														</td>
+														<template for:each={getPaymentRadioOptions} for:item='item'>
+															<td key={item}>
+																<input type="radio" name="payment" id={item.value}
+																	value={item.value} onchange={changeRadioOptions}
+																	checked={item.checked}>
+																<label
+																	class="slds-radio__label">{item.label}</label>
+															</td>
+														</template>
+													</tr>
+													<tr>
+														<td>
+															<label><abbr class="slds-required"
+																	title="required">*</abbr>Statement beginning
+																balance shows $0</label>
+														</td>
+														<template for:each={getBalanceRadioOptions} for:item='item'>
+															<td key={item}>
+																<input type="radio" name="balance" id={item.value}
+																	value={item.value} onchange={changeRadioOptions}
+																	checked={item.checked}>
+																<label
+																	class="slds-radio__label">{item.label}</label>
+															</td>
+														</template>
+													</tr>
+												</table>
+											</lightning-layout-item>
+											<lightning-layout-item lwc:if={showStatementBeginning}
+												padding="around-small" size="8">
+												<lightning-input-field data-id="nameCmp"
+													field-name="Statement_Beginning_Balance_Amount__c"
+													value={record.Statement_Beginning_Balance_Amount__c} required>
+												</lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item padding="around-small" size="8">
+												<lightning-input-field data-id="accType" field-name="Account_Type__c"
+													value={record.Account_Type__c} onchange={changeAccountType}
+													required>
+												</lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item padding="around-small" size="8">
+												<lightning-input-field data-id="specialAccType"
+													field-name="Special_Account_Type__c"
+													value={record.Special_Account_Type__c}
+													disabled={readOnlySpecialAccountType} required>
+												</lightning-input-field>
+											</lightning-layout-item>
+											<!-- radio buttons new ticket End-->
+											<lightning-layout-item padding="around-small" size="8">
+												<lightning-input-field field-name="Added_a_listing_successfully__c"
+													value={record.Added_a_listing_successfully__c} required>
+												</lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item padding="around-small" size="8">
+												<lightning-input-field
+													field-name="Checked_Account_Info_Page_no_alerts__c"
+													value={record.Checked_Account_Info_Page_no_alerts__c} required>
+												</lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item padding="around-small" size="8">
+												<lightning-input-field
+													field-name="Checked_Account_Health_Page_no_alerts__c"
+													value={record.Checked_Account_Health_Page_no_alerts__c} required>
+												</lightning-input-field>
+											</lightning-layout-item>
+											<lightning-layout-item padding="around-small" size="8">
+												<lightning-input-field field-name="Checked_Performance_Notifications__c"
+													value={record.Checked_Performance_Notifications__c} required>
+												</lightning-input-field>
+											</lightning-layout-item>
+										</template>
+									</template>
+								</template>
+							</template>
+						</template>
+					</template>
+				</lightning-layout>
+			</lightning-record-edit-form>
+		</template>
+	</div>
+</template>

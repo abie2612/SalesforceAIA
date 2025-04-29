@@ -1,0 +1,3 @@
+<apex:page standardcontroller="Contract"  cache="true" extensions="GenerateContractPdf" action="{!savePdf}" applyBodyTag="false">
+
+</apex:page>
